@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+<div>
+  <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+
+  <script type="text/javascript">
+  //this is the webaudio loooooppppppp
+  //enter url in the next line
+  var url  = '/360/shohola/media/stream-sound.ogg';
+
+  /* --- set up web audio --- */
+  //create the context
+  var context = new AudioContext();
+  //...and the source
+  var source = context.createBufferSource();
+  //connect it to the destination so you can hear it.
+  source.connect(context.destination);
+
+  /* --- load buffer ---  */
+  var request = new XMLHttpRequest();
+  //open the request
+  request.open('GET', url, true);
+  //webaudio paramaters
+  request.responseType = 'arraybuffer';
+  //Once the request has completed... do this
+  request.onload = function() {
+      context.decodeAudioData(request.response, function(response) {
+          /* --- play the sound AFTER the buffer loaded --- */
+          //set the buffer to the response we just received.
+          source.buffer = response;
+          //start(0) should play asap.
+          source.start(0);
+          source.loop = true;
+      }, function () { console.error('The request failed.'); } );
+  }
+  //Now that the request has been defined, actually make the request. (send it)
+  request.send();
+</script>
+  <a-scene embedded="" style="height: 600px; width: 100%" class="" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="" auto-enter-vr="">
+    <a-assets>
+      <video id="jump" preload="true" autoplay loop="true" src="/360/shohola/media/stream-jump-cingraph-360.mp4">
+      <!--<audio id="river" autoplay="true" loop="true" src="/360/reel-page/images/stream-sound.ogg" preload="true">-->
+    </a-assets>
+
+    <a-videosphere src="#jump"></a-videosphere>
+    <!--<a-entity sound="src: #river"></a-entity>-->
+
+  </a-scene>
+</div>
+</body>
+</html>
